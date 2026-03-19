@@ -1,14 +1,30 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
+using TMPro;
 public class RoundManager : MonoBehaviour
 {
     public MoveSelectionManager moveManager;
+    public Slider player1HPBar;
+    public Slider player2HPBar;
 
+    public TextMeshProUGUI player1HPText;
+    public TextMeshProUGUI player2HPText;
     public int player1HP = 100;
     public int player2HP = 100;
+    public TextMeshProUGUI statusText;
+    public TextMeshProUGUI roundText;
 
+    int roundNumber = 1;
+    void UpdateHPUI()
+    {
+        player1HPBar.value = player1HP;
+        player2HPBar.value = player2HP;
+
+        player1HPText.text = "" + player1HP;
+        player2HPText.text = "" + player2HP;
+    }
     public void StartSimulation()
     {
         StartCoroutine(SimulateRounds());
@@ -24,14 +40,15 @@ public class RoundManager : MonoBehaviour
     {
         List<int> p1Moves = moveManager.player1Moves;
         List<int> p2Moves = moveManager.player2Moves;
-
+        roundText.text = "ROUND " + roundNumber;
         for (int i = 0; i < 3; i++)
         {
             Debug.Log("Round " + (i + 1) +
             " | P1: " + MoveName(p1Moves[i]) +
             " vs P2: " + MoveName(p2Moves[i]));
+            
 
-            ResolveRound(p1Moves[i], p2Moves[i]);
+            yield return StartCoroutine(ResolveRound(p1Moves[i], p2Moves[i]));
 
             if (player1HP <= 0 || player2HP <= 0)
             {
@@ -44,11 +61,19 @@ public class RoundManager : MonoBehaviour
         if (player1HP <= 0)
         {
             Debug.Log("PLAYER 2 WINS!");
+            statusText.text = "PLAYER 2 WINS!";
+            moveManager.simulationRunning = true; // lock game
+            yield break;
         }
         else if (player2HP <= 0)
         {
             Debug.Log("PLAYER 1 WINS!");
+            statusText.text = "PLAYER 1 WINS!";
+            moveManager.simulationRunning = true; // lock game
+            yield break;
         }
+
+        // ONLY runs if no one died
         Debug.Log("Simulation Finished");
 
         moveManager.player1Moves.Clear();
@@ -57,28 +82,41 @@ public class RoundManager : MonoBehaviour
         moveManager.simulationRunning = false;
 
         moveManager.ResetTurn();
+        roundNumber++;
     }
 
-    void ResolveRound(int p1Move, int p2Move)
+    IEnumerator ResolveRound(int p1Move, int p2Move)
     {
+        // Step 1: Show moves
+        statusText.text =
+            "P1 uses " + MoveName(p1Move);
+
+        yield return new WaitForSeconds(1f);
+
+        statusText.text +=
+            "\nP2 uses " + MoveName(p2Move);
+
+        yield return new WaitForSeconds(1f);
+
+        // Step 2: Resolve logic
         float roll = Random.Range(0f, 1f);
 
         if (p1Move == 2 && p2Move == 2)
         {
-            Debug.Log("Both players blocked. Nothing happens.");
-            return;
+            statusText.text += "\nBoth blocked!";
+            yield return new WaitForSeconds(1.5f);
+            yield break;
         }
 
         if (p1Move == p2Move)
         {
-            float roll1 = Random.Range(0f, 1f);
-
-            if (roll1 < 0.5f)
+            if (Random.value < 0.5f)
                 DamagePlayer2(Random.Range(12, 18));
             else
                 DamagePlayer1(Random.Range(12, 18));
 
-            return;
+            yield return new WaitForSeconds(1.5f);
+            yield break;
         }
 
         // LIGHT vs HEAVY
@@ -90,24 +128,6 @@ public class RoundManager : MonoBehaviour
                 DamagePlayer1(Random.Range(25, 35));
         }
 
-        else if (p1Move == 2 && p2Move == 1)
-        {
-            int dmg = Random.Range(25, 35);
-            float reduction = Random.Range(0.40f, 0.65f);
-            dmg = Mathf.RoundToInt(dmg * (1 - reduction));
-
-            DamagePlayer1(dmg);
-        }
-
-        else if (p1Move == 1 && p2Move == 2)
-        {
-            int dmg = Random.Range(25, 35);
-            float reduction = Random.Range(0.40f, 0.65f);
-            dmg = Mathf.RoundToInt(dmg * (1 - reduction));
-
-            DamagePlayer2(dmg);
-        }
-
         // HEAVY vs LIGHT
         else if (p1Move == 1 && p2Move == 0)
         {
@@ -117,25 +137,33 @@ public class RoundManager : MonoBehaviour
                 DamagePlayer2(Random.Range(25, 35));
         }
 
-        // LIGHT vs BLOCK
-        else if (p1Move == 0 && p2Move == 2)
+        // BLOCK vs HEAVY
+        else if (p1Move == 2 && p2Move == 1)
         {
-            int dmg = Random.Range(12, 18);
-            float reduction = Random.Range(0.40f, 0.65f);
-            dmg = Mathf.RoundToInt(dmg * (1 - reduction));
+            int dmg = Mathf.RoundToInt(Random.Range(25, 35) * (1 - Random.Range(0.4f, 0.65f)));
+            DamagePlayer1(dmg);
+        }
 
+        else if (p1Move == 1 && p2Move == 2)
+        {
+            int dmg = Mathf.RoundToInt(Random.Range(25, 35) * (1 - Random.Range(0.4f, 0.65f)));
             DamagePlayer2(dmg);
         }
 
-        // BLOCK vs LIGHT
+        // LIGHT vs BLOCK
+        else if (p1Move == 0 && p2Move == 2)
+        {
+            int dmg = Mathf.RoundToInt(Random.Range(12, 18) * (1 - Random.Range(0.4f, 0.65f)));
+            DamagePlayer2(dmg);
+        }
+
         else if (p1Move == 2 && p2Move == 0)
         {
-            int dmg = Random.Range(12, 18);
-            float reduction = Random.Range(0.40f, 0.65f);
-            dmg = Mathf.RoundToInt(dmg * (1 - reduction));
-
+            int dmg = Mathf.RoundToInt(Random.Range(12, 18) * (1 - Random.Range(0.4f, 0.65f)));
             DamagePlayer1(dmg);
         }
+
+        yield return new WaitForSeconds(1.5f);
     }
 
     void DamagePlayer1(int dmg)
@@ -146,7 +174,9 @@ public class RoundManager : MonoBehaviour
             player1HP = 0;
 
         Debug.Log("Player1 took " + dmg + " damage.");
-        Debug.Log("HP Status → P1: " + player1HP + " | P2: " + player2HP);
+        statusText.text += "\nPlayer1 loses " + dmg + " HP!";
+
+        UpdateHPUI();
     }
     void DamagePlayer2(int dmg)
     {
@@ -156,6 +186,8 @@ public class RoundManager : MonoBehaviour
             player2HP = 0;
 
         Debug.Log("Player2 took " + dmg + " damage.");
-        Debug.Log("HP Status → P1: " + player1HP + " | P2: " + player2HP);
+        statusText.text += "\nPlayer2 loses " + dmg + " HP!";
+
+        UpdateHPUI();
     }
 }
