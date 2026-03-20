@@ -6,7 +6,7 @@ public class MainMenuController : MonoBehaviour
     public void Load1v1()
     {
         Debug.Log("Button pressed");
-        SceneManager.LoadScene("DualScene");
+        SceneManager.LoadScene("LoginScreen");
     }
 
     public void LoadTournament()
