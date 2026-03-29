@@ -33,22 +33,21 @@ public class LoginManager : MonoBehaviour
         PopulateDropdowns();
     }
 
-    void PopulateDropdowns()
+    public void PopulateDropdowns()
     {
+        StartCoroutine(PopulateFromAPI());
+    }
+
+    IEnumerator PopulateFromAPI()
+    {
+        yield return StartCoroutine(api.GetUsers());
+
         p1Dropdown.ClearOptions();
         p2Dropdown.ClearOptions();
 
-        List<string> names = new List<string>();
-
-        foreach (var user in userManager.users)
-        {
-            names.Add(user.username);
-        }
-
-        p1Dropdown.AddOptions(names);
-        p2Dropdown.AddOptions(names);
+        p1Dropdown.AddOptions(api.fetchedUsers);
+        p2Dropdown.AddOptions(api.fetchedUsers);
     }
-
     // 🔐 PLAYER 1 LOGIN
     public void LoginP1()
     {
@@ -159,7 +158,6 @@ public class LoginManager : MonoBehaviour
             p2Status.text = "Same user!";
             return;
         }
-
         SceneManager.LoadScene("MapSelection");
     }
 

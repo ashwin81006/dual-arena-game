@@ -55,7 +55,6 @@ public class MoveSelectionManager : MonoBehaviour
 
             if (player2Moves.Count == 3)
             {
-                statusText.text = "Simulation Starting...";
                 simulationRunning = true;
 
                 FindFirstObjectByType<RoundManager>().StartSimulation();

@@ -41,6 +41,9 @@ public class MapSelectionManager : MonoBehaviour
 
     public void GoBack()
     {
-        SceneManager.LoadScene("LoginScreen");
+        if (GameData.isTournamentMode)
+            SceneManager.LoadScene("TournamentMatchScene");
+        else
+            SceneManager.LoadScene("LoginScreen");
     }
 }

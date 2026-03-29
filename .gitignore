@@ -1,13 +1,14 @@
-Dual Arena/Library/
-Dual Arena/Temp/
-Dual Arena/Logs/
-Dual Arena/Build/
-Dual Arena/obj/
-Dual Arena/UserSettings/
-Dual Arena/.vs/
+# Unity
+Dual-Arena/Library/
+Dual-Arena/Temp/
+Dual-Arena/Logs/
+Dual-Arena/UserSettings/
+Dual-Arena/Build/
+Dual-Arena/Builds/
 
-*.csproj
-*.sln
-*.user
-*.log
-*.vsconfig
+# Node
+backend/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

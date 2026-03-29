@@ -6,8 +6,10 @@ public class HowToPlayManager : MonoBehaviour
 {
     public GameObject panel;
     public TextMeshProUGUI leftText;
+    public TextMeshProUGUI rrule;
     public TextMeshProUGUI rightText;
     public TextMeshProUGUI rulesText;
+    public GameObject BackBtn;
     public GameObject b1;
     public GameObject b2;
     public GameObject b3;
@@ -28,36 +30,41 @@ public class HowToPlayManager : MonoBehaviour
         b1.SetActive(false);
         b2.SetActive(false);
         b3.SetActive(false);
+        BackBtn.SetActive(true);
 
         leftText.gameObject.SetActive(true);
         rightText.gameObject.SetActive(true);
-
+        rrule.text = "Rules (1v1 Battle)";
         leftText.text =
-        "1v1 BATTLE\n\n" +
+"GAME FLOW:\n" +
+"- Two players fight each other\n" +
+"- Each player selects 3 moves in advance\n" +
+"- Hide your screen from the opponent while choosing your moves\n" +
+"- Moves play automatically in order\n" +
+ "- Reduce opponent HP to 0 to win\n\n" +
 
-        "GAME FLOW:\n" +
-        "- Two players fight\n" +
-        "- Each selects 3 moves\n" +
-        "- Fight runs automatically\n\n" +
-
-        "MOVES:\n" +
-        "- Light: fast, low damage\n" +
-        "- Heavy: slow, high damage\n" +
-        "- Block: reduces damage";
+"MOVES:\n" +
+"- Light Attack:\n" +
+"  Fast attack, low damage\n\n" +
+"- Heavy Attack:\n" +
+"  Slower attack, high damage\n\n" +
+"- Block:\n" +
+"  Defensive move that can stop attacks\n";
 
         rightText.text =
-        "MECHANICS:\n" +
-        "- Light beats Heavy often\n" +
-        "- Heavy can deal big damage\n" +
-        "- Block reduces incoming damage\n" +
-        "- Same moves = random hit\n\n" +
+        "MOVE RESULTS:\n\n" +
+        "- Light vs Heavy:\n" +
+        "  Heavy attacker beats Light attacker, light attacker takes significant damage\n\n" +
 
-        "WIN CONDITION:\n" +
-        "- Reduce opponent HP to 0\n\n" +
+        "- Heavy vs Block:\n" +
+        "  Block stops the attack and reflects damage back\n" +
+        "  The Heavy attacker takes damage\n\n" +
 
-        "TIP:\n" +
-        "- Mix moves smartly\n" +
-        "- Predict opponent";
+        "- Light vs Block:\n" +
+        "  Light attack breaks through Block. The player who blocked takes slight damage\n\n" +
+
+        "- Same move by both player = NO HP Loss:\n";
+
     }
 
     public void ShowTournamentRules()
@@ -65,31 +72,51 @@ public class HowToPlayManager : MonoBehaviour
         b1.SetActive(false);
         b2.SetActive(false);
         b3.SetActive(false);
+        BackBtn.SetActive(true);
 
         leftText.gameObject.SetActive(true);
         rightText.gameObject.SetActive(true);
 
+        rrule.text = "Rules (Tournament)";
+
         leftText.text =
-        "TOURNAMENT MODE\n\n" +
+        "TOURNAMENT STRUCTURE\n\n" +
 
-        "FORMAT:\n" +
-        "- Multiple players\n" +
-        "- 1v1 matches\n\n" +
+        "- Players compete in a knockout bracket\n" +
+        "- Supported sizes: 4, 8, or 16 players\n" +
+        "- Each match is a 1v1 battle\n" +
+        "- Players are eliminated after losing a match\n\n" +
 
-        "PROGRESSION:\n" +
-        "- Winners advance\n" +
-        "- Losers eliminated";
+        "MATCH FLOW\n" +
+        "- Each player selects 3 moves per match\n" +
+        "- Moves are executed round by round\n" +
+        "- Each round compares both players' moves\n" +
+        "- Damage is applied based on move interactions\n";
 
         rightText.text =
-        "FINAL:\n" +
-        "- Last 2 players fight\n" +
-        "- Winner becomes champion\n\n" +
+        "MOVE INTERACTIONS\n\n" +
 
-        "STRATEGY:\n" +
-        "- Adapt each round\n" +
-        "- Learn opponent patterns\n\n" +
+        "- Light vs Heavy: Heavy wins and deals high damage\n" +
+        "- Heavy vs Block: Block reflects damage back to attacker\n" +
+        "- Light vs Block: Light still deals damage\n" +
+        "- Same moves: No damage (draw round)\n\n" +
 
-        "GOAL:\n" +
-        "- Win all matches";
+        "WIN CONDITION\n" +
+        "- Reduce opponent HP to 0 to win the match\n" +
+        "- Winner advances to next round\n" +
+        "- Final match determines the champion\n";
+    }
+
+    public void BackGo()
+    {
+        rrule.text = "Rules";
+        b1.SetActive(true);
+        b2.SetActive(true);
+        b3.SetActive(true);
+        BackBtn.SetActive(false);
+
+        leftText.gameObject.SetActive(false);
+        rightText.gameObject.SetActive(false);
+
     }
 }
