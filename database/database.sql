@@ -283,3 +283,29 @@ BEGIN
 END //
 
 DELIMITER ;
+
+select * from matches;
+select * from users;
+UPDATE Mapstats SET MapName = "Castle Arena" WHERE MapID = 1;
+UPDATE Mapstats SET MapName = "Colosseum Arena" WHERE MapID = 2;
+UPDATE Mapstats SET MapName = "Prison Arena" WHERE MapID = 3;
+UPDATE Mapstats SET MapName = "Cave Arena" WHERE MapID = 4;
+ALTER TABLE mapstats
+RENAME COLUMN map_name TO MapName;
+
+SELECT MapID, 0, 0, 0 FROM Maps;
+
+alter table mapstats add map_name varchar(50);
+
+INSERT INTO PlayerStats (UserID)
+SELECT UserID FROM Users;
+select * from matches;
+select * from moves;
+select * from rounds;
+select* from playerstats;
+
+truncate table playerstats;
+
+
+
+SELECT UserID, TotalDamageDealt, TotalDamageTaken FROM PlayerStats;

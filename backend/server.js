@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
+const matchRoutes = require("./routes/match");
 
 app.use(cors());
 app.use(express.json());
@@ -12,6 +13,6 @@ app.use("/match", require("./routes/match"));
 app.use("/stats", require("./routes/stats"));
 
 
-app.listen(3000, () => {
+app.listen(3000,"0.0.0.0", () => {
     console.log("Server running on port 3000");
 });
