@@ -3,12 +3,19 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
+
+[System.Serializable]
+public class Wrapper
+{
+    public List<RoundDataSend> rounds;
+}
+
 public class APIManager : MonoBehaviour
 {
     public bool lastLoginSuccess;
     public bool lastRegisterSuccess;
     public string lastPlayerStatsJSON;
-    string baseURL = "http://192.168.56.1:3000";
+    string baseURL = "http://10.1.232.184:3000";
 
     public string lastMoveJSON;
     public string topPlayersJSON;
@@ -27,6 +34,53 @@ public class APIManager : MonoBehaviour
         {
             lastMoveJSON = www.downloadHandler.text;
             Debug.Log("Most Used Move: " + lastMoveJSON);
+        }
+    }
+
+    public IEnumerator SaveMatchWithRounds(string p1, string p2, string winner, int mapId, List<RoundDataSend> rounds)
+    {
+        Wrapper w = new Wrapper();
+        w.rounds = rounds;
+
+        string json = JsonUtility.ToJson(w);
+
+        WWWForm form = new WWWForm();
+        form.AddField("player1", p1);
+        form.AddField("player2", p2);
+        form.AddField("winner", winner);
+        form.AddField("mapId", mapId);
+        form.AddField("rounds", json);
+
+        UnityWebRequest www = UnityWebRequest.Post(baseURL + "/match/saveMatch", form);
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Match + Rounds saved!");
+        }
+        else
+        {
+            Debug.Log("Error: " + www.error);
+        }
+    }
+    public IEnumerator SaveMatch(string p1, string p2, string winner, int mapId)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("player1", p1);
+        form.AddField("player2", p2);
+        form.AddField("winner", winner);
+        form.AddField("mapId", mapId);
+
+        UnityWebRequest www = UnityWebRequest.Post(baseURL + "/match/saveMatch", form);
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Match saved!");
+        }
+        else
+        {
+            Debug.Log("Error saving match: " + www.error);
         }
     }
     public IEnumerator Login(string username, string password)

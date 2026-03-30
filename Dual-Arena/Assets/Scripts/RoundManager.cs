@@ -5,11 +5,30 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
+
+[System.Serializable]
+public class MoveDataSend
+{
+    public string player;
+    public string move;
+    public int damage;
+}
+
+[System.Serializable]
+public class RoundDataSend
+{
+    public int roundNumber;
+    public List<MoveDataSend> moves;
+}
+
 public class RoundManager : MonoBehaviour
 {
     public MoveSelectionManager moveManager;
     public SpriteRenderer backgroundRenderer;
     public Sprite[] maps;
+    public APIManager api;
+
+    List<RoundDataSend> allRounds = new List<RoundDataSend>();
 
     public GameObject p1Shield;
     public GameObject p2Shield;
@@ -48,6 +67,8 @@ public class RoundManager : MonoBehaviour
     public int player1HP = 100;
     public int player2HP = 100;
     public GameObject[] uiButtons;
+    int lastP1Damage = 0;
+    int lastP2Damage = 0;
 
     int roundNumber = 1;
 
@@ -107,6 +128,13 @@ public class RoundManager : MonoBehaviour
 
     void ShowResult(string winnerName)
     {
+        StartCoroutine(api.SaveMatchWithRounds(
+            GameData.player1Name,
+            GameData.player2Name,
+            winnerName,
+            GameData.selectedMap,
+            allRounds
+        ));
         resultPanel.SetActive(true);
 
         resultText.text = winnerName + " WINS!";
@@ -225,6 +253,28 @@ public class RoundManager : MonoBehaviour
         ApplyDamage(winner, p1Move, p2Move);
 
         yield return new WaitForSeconds(1.5f);
+        // 🔥 SAVE ROUND DATA
+        RoundDataSend round = new RoundDataSend();
+        round.roundNumber = roundNumber;
+        round.moves = new List<MoveDataSend>();
+
+        // Player 1
+        round.moves.Add(new MoveDataSend
+        {
+            player = GameData.player1Name,
+            move = MoveName(p1Move),
+            damage = lastP1Damage
+        });
+
+        // Player 2
+        round.moves.Add(new MoveDataSend
+        {
+            player = GameData.player2Name,
+            move = MoveName(p2Move),
+            damage = lastP2Damage
+        });
+
+        allRounds.Add(round);
         p1MoveText.text = "";
         p2MoveText.text = "";
     }
@@ -401,8 +451,12 @@ public class RoundManager : MonoBehaviour
         int blockReflect = Random.Range(7, 13);
 
         // 🔥 HEAVY vs BLOCK (REFLECT DAMAGE)
+        // HEAVY vs BLOCK
         if (p1Move == 1 && p2Move == 2)
         {
+            lastP1Damage = 0;
+            lastP2Damage = blockReflect;
+
             statusText.text = GameData.player2Name + " deflects the attack! Hard luck for " + GameData.player1Name;
             DamagePlayer1(blockReflect);
             return;
@@ -410,38 +464,65 @@ public class RoundManager : MonoBehaviour
 
         if (p2Move == 1 && p1Move == 2)
         {
+            lastP2Damage = 0;
+            lastP1Damage = blockReflect;
+
             statusText.text = GameData.player1Name + " deflects the attack! Hard luck for " + GameData.player2Name;
             DamagePlayer2(blockReflect);
             return;
         }
 
         // NORMAL DAMAGE
+        lastP1Damage = 0;
+        lastP2Damage = 0;
+
         if (winner == 1)
         {
-            if (p1Move == 1) DamagePlayer2(heavyDamage);
-            else if (p1Move == 0) DamagePlayer2(lightDamage);
+            if (p1Move == 1)
+            { 
+                DamagePlayer2(heavyDamage);
+            }
+            else if (p1Move == 0)
+            { 
+                DamagePlayer2(lightDamage);
+            }
         }
         else if (winner == 2)
         {
-            if (p2Move == 1) DamagePlayer1(heavyDamage);
-            else if (p2Move == 0) DamagePlayer1(lightDamage);
+            if (p2Move == 1)
+            { 
+                DamagePlayer1(heavyDamage);
+            }
+            else if (p2Move == 0)
+            { 
+                DamagePlayer1(lightDamage);
+            }
         }
+        Debug.Log("P1 Damage: " + lastP1Damage + " | P2 Damage: " + lastP2Damage);
     }
 
     void DamagePlayer1(int dmg)
     {
         string p1 = GameData.player1Name;
-        player1HP = Mathf.Max(0, player1HP - dmg);
+        int actualDamage = Mathf.Min(dmg, player1HP);
+        player1HP -= actualDamage;
 
-        statusText.text += "\n-" + dmg + " HP for " + p1;
+        // 🔥 IMPORTANT
+        lastP2Damage = actualDamage;
+
+        statusText.text += "\n-" + actualDamage + " HP for " + p1;
         UpdateHPUI();
     }
     void DamagePlayer2(int dmg)
     {
         string p2 = GameData.player2Name;
-        player2HP = Mathf.Max(0, player2HP - dmg);
+        int actualDamage = Mathf.Min(dmg, player2HP);
+        player2HP -= actualDamage;
 
-        statusText.text += "\n-" + dmg + " HP for " + p2;
+        // 🔥 IMPORTANT
+        lastP1Damage = actualDamage;
+
+        statusText.text += "\n-" + actualDamage + " HP for " + p2;
         UpdateHPUI();
     }
 }
