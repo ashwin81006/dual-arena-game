@@ -8,7 +8,7 @@ public class APIManager : MonoBehaviour
     public bool lastLoginSuccess;
     public bool lastRegisterSuccess;
     public string lastPlayerStatsJSON;
-    string baseURL = "http://192.168.56.1:3000";
+    string baseURL = "http://10.109.169.24";
 
     public string lastMoveJSON;
     public string topPlayersJSON;
