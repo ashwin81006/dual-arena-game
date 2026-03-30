@@ -7,7 +7,7 @@ Dual-Arena/Build/
 Dual-Arena/Builds/
 
 # Node
-backend/node_modules/
+node_modules/
 
 # OS
 .DS_Store
