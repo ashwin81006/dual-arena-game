@@ -39,6 +39,47 @@ public class APIManager : MonoBehaviour
 
     public List<Tournament> fetchedTournaments = new List<Tournament>();
 
+    [System.Serializable]
+    public class TournamentMatch
+    {
+        public string Player1;
+        public string Player2;
+        public string Winner;
+        public int RoundNumber;
+        public int MatchOrder;
+    }
+
+    [System.Serializable]
+    public class MatchListWrapper
+    {
+        public List<TournamentMatch> matches;
+    }
+
+    public List<TournamentMatch> fetchedMatches = new List<TournamentMatch>();
+
+    public IEnumerator GetTournamentMatches(int tournamentId)
+    {
+        UnityWebRequest www = UnityWebRequest.Get(
+            baseURL + "/tournament/getMatches/" + tournamentId);
+
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            string json = www.downloadHandler.text;
+            Debug.Log("MATCHES: " + json);
+
+            MatchListWrapper wrapper =
+                JsonUtility.FromJson<MatchListWrapper>("{\"matches\":" + json + "}");
+
+            fetchedMatches = wrapper.matches;
+        }
+        else
+        {
+            Debug.LogError("❌ Failed to fetch matches: " + www.error);
+        }
+    }
+
     public IEnumerator GetTournaments()
     {
         UnityWebRequest www = UnityWebRequest.Get(baseURL + "/tournament/getTournaments");

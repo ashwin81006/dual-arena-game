@@ -464,6 +464,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 565694192}
   m_CullTransparentMesh: 1
+--- !u!1 &618383181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 618383182}
+  - component: {fileID: 618383183}
+  m_Layer: 0
+  m_Name: APIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &618383182
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618383181}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 27.414307, y: 57.254517, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1159071391}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &618383183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618383181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e15006b2b95e44c9cfc996a3eb705e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::APIManager
+  lastLoginSuccess: 0
+  lastRegisterSuccess: 0
+  lastPlayerStatsJSON: 
+  lastMoveJSON: 
+  topPlayersJSON: 
+  matchHistoryJSON: 
+  mostPlayedMapJSON: 
+  winRateJSON: 
+  createdTournamentID: 0
+  fetchedTournaments: []
+  fetchedMatches: []
+  fetchedUsers: []
 --- !u!1 &683661794
 GameObject:
   m_ObjectHideFlags: 0
@@ -1278,6 +1334,7 @@ RectTransform:
   - {fileID: 1224117018}
   - {fileID: 565694193}
   - {fileID: 1018703353}
+  - {fileID: 618383182}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1335,6 +1392,7 @@ MonoBehaviour:
   matchInfoText: {fileID: 683806838}
   nextButton: {fileID: 565694192}
   mmButton: {fileID: 1018703352}
+  api: {fileID: 618383183}
 --- !u!1 &1561721129
 GameObject:
   m_ObjectHideFlags: 0

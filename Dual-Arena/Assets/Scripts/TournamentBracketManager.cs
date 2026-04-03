@@ -15,21 +15,32 @@ public class TournamentBracketManager : MonoBehaviour
     public GameObject nextButton;
     public GameObject mmButton;
 
+    public APIManager api;
 
-    void Start()
+    IEnumerator Start()
     {
-        if (!GameData.winnerProcessed)
+        yield return StartCoroutine(api.GetTournamentMatches(GameData.currentTournamentID));
+
+        if (api.fetchedMatches == null || api.fetchedMatches.Count == 0)
         {
-            HandleWinnerReturn();
+            Debug.LogError("❌ No matches found in DB");
+            yield break;
         }
-        if (GameData.tournamentFinished)
+
+        // rebuild GameData
+        GameData.tournamentMatches.Clear();
+
+        foreach (var m in api.fetchedMatches)
         {
-            nextButton.SetActive(false);
-            mmButton.SetActive(true);
-            bracketText.text = "Tournament Over!";
-            matchInfoText.text = "CHAMPION: " + GameData.tournamentWinner;
-            return;
+            MatchData match = new MatchData();
+            match.player1 = m.Player1;
+            match.player2 = m.Player2;
+            match.winner = m.Winner;
+
+            GameData.tournamentMatches.Add(match);
         }
+
+        GameData.tournamentMatchIndex = 0;
 
         DisplayBracket();
         UpdateCurrentMatch();

@@ -97,4 +97,24 @@ router.get("/getTournaments", (req, res) => {
         res.send(result);
     });
 });
+
+router.get("/getMatches/:tournamentId", (req, res) => {
+    const { tournamentId } = req.params;
+
+    const sql = `
+        SELECT Player1, Player2, Winner, RoundNumber, MatchOrder
+        FROM TournamentMatches
+        WHERE TournamentID = ?
+        ORDER BY RoundNumber ASC, MatchOrder ASC
+    `;
+
+    db.query(sql, [tournamentId], (err, result) => {
+        if (err) {
+            console.log("❌ FETCH MATCHES ERROR:", err);
+            return res.send([]);
+        }
+
+        res.send(result);
+    });
+});
 module.exports = router;
