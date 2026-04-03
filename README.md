@@ -1,18 +1,7 @@
 
-👉 at the **very start and very end of the entire README**
-
-```
-
-## 🔥 EXACT COPY-PASTE FORMAT
-
-Just paste this into GitHub:
-
-````markdown
 # 🎮 Duel Arena
 
 A turn-based fighting game built using **Unity + Node.js + MySQL**, featuring tournaments, player stats, and match history.
-
-```
 
 ## 🚀 Features
 
@@ -22,8 +11,6 @@ A turn-based fighting game built using **Unity + Node.js + MySQL**, featuring to
 - 🗺️ Multiple maps  
 - 🔐 Login system  
 
-```
-
 ## 📦 Installation
 
 ### Clone repo
@@ -32,21 +19,22 @@ A turn-based fighting game built using **Unity + Node.js + MySQL**, featuring to
 
 ### Setup DB
 Run:
-    DuelArenaDB.sql
+    database/database.sql
 
 ### Backend
     cd backend
     npm install
 
 Create `.env`:
+
     DB_HOST=localhost
     DB_USER=your_user
     DB_PASSWORD=your_password
     DB_NAME=DuelArenaDB
 
 Run:
-    node server.js
-
+```
+node server.js
 ```
 
 ## 🎮 How to Play
@@ -56,7 +44,3 @@ Run:
 3. Play  
 
 ```
-
-## 👨‍💻 Author
-
-Ashwin Siva  
