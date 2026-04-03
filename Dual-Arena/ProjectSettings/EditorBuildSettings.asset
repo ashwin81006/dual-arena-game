@@ -17,6 +17,36 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TournamentScene.unity
     guid: 2dd19eaf516d9a14ebffe7e7d7ac508b
+  - enabled: 1
+    path: Assets/Scenes/LoginScreen.unity
+    guid: 0711a472d1b3447408d063daf7729b2b
+  - enabled: 1
+    path: Assets/Scenes/MapSelection.unity
+    guid: 0ed44bcb262e1b941af0aeefeb7d6c36
+  - enabled: 1
+    path: Assets/Scenes/TournamentSelect.unity
+    guid: 5b7b422977dc83847bf8af28459827fb
+  - enabled: 1
+    path: Assets/Scenes/LoadTournamentScene.unity
+    guid: ecf110cca5096e3459f0c8324396ed4c
+  - enabled: 1
+    path: Assets/Scenes/PlayerSelectionScene.unity
+    guid: 44def2fa1238b834ca4e5fceb2881b0f
+  - enabled: 1
+    path: Assets/Scenes/TournamentMatchScene.unity
+    guid: f70481f154c011540a3fa4e6de11efb4
+  - enabled: 1
+    path: Assets/Scenes/HowToPlay.unity
+    guid: 8f4269558eec4464fbc9d01da2d0e566
+  - enabled: 1
+    path: Assets/Scenes/PreStat.unity
+    guid: 2a8885f12e1db2e46b9baa38a6174e5a
+  - enabled: 1
+    path: Assets/Scenes/StatLogin.unity
+    guid: 34b8e45533fcd704cad5fbe6ada4ef1e
+  - enabled: 1
+    path: Assets/Scenes/AboutScene.unity
+    guid: 4ccf8e9e3731fae4788ad129e122e9df
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

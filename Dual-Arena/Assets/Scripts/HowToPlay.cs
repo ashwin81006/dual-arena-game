@@ -33,6 +33,7 @@ public class HowToPlayManager : MonoBehaviour
         b2.SetActive(false);
         b3.SetActive(false);
         BackBtn.SetActive(true);
+        rulesText.text = "";
 
         leftText.gameObject.SetActive(true);
         rightText.gameObject.SetActive(true);
@@ -76,6 +77,7 @@ public class HowToPlayManager : MonoBehaviour
         b2.SetActive(false);
         b3.SetActive(false);
         BackBtn.SetActive(true);
+        rulesText.text = "";
 
         leftText.gameObject.SetActive(true);
         rightText.gameObject.SetActive(true);
@@ -113,6 +115,7 @@ public class HowToPlayManager : MonoBehaviour
     public void BackGo()
     {
         rrule.text = "Rules";
+        rulesText.text = "Rules"; 
         b1.SetActive(true);
         b2.SetActive(true);
         b3.SetActive(true);
