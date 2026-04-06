@@ -230,6 +230,79 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE GetRules(IN rtype VARCHAR(50))
+BEGIN
+    SELECT * FROM Rules WHERE RuleType = rtype;
+END //
+
+DELIMITER ;
+
+CREATE TABLE Rules (
+    RuleType VARCHAR(50) PRIMARY KEY,
+    Title TEXT,
+    LeftText TEXT,
+    RightText TEXT
+);
+
+INSERT INTO Rules VALUES
+(
+'1v1',
+'Rules (1v1 Battle)',
+'GAME FLOW:
+- Two players fight each other
+- Each player selects 3 moves in advance
+- Hide your screen from opponent
+- Moves play automatically
+- Reduce opponent HP to 0 to win
+
+MOVES:
+- Light Attack: Fast low damage
+- Heavy Attack: Slow high damage
+- Block: Defensive move',
+'MOVE RESULTS:
+
+- Light vs Heavy:
+Heavy beats Light
+
+- Heavy vs Block:
+Block reflects damage
+
+- Light vs Block:
+Light breaks block
+
+- Same move:
+No HP loss'
+);
+
+INSERT INTO Rules VALUES
+(
+'tournament',
+'Rules (Tournament)',
+'TOURNAMENT STRUCTURE
+
+- Players compete in knockout
+- 4, 8 or 16 players
+- Each match is 1v1
+- Lose = eliminated
+
+MATCH FLOW
+- Each player selects 3 moves
+- Moves executed automatically
+- Damage applied each round',
+'MOVE INTERACTIONS
+
+- Light vs Heavy → Heavy wins
+- Heavy vs Block → Block reflects
+- Light vs Block → Light wins
+- Same moves → No damage
+
+WIN CONDITION
+- Reduce HP to 0
+- Winner advances
+- Final decides champion'
+);
 
 INSERT INTO Maps (MapName) VALUES
 ('Castle Arena'), ('Colosseum Arena'), ('Prison Arena'), ('Cave Arena');
